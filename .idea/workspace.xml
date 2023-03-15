@@ -4,13 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b0f5b74-9b71-46ea-b86c-b76631f4ee0c" name="Changes" comment="feat/Crypto: initial commit w/ teacher's example">
-      <change beforePath="$PROJECT_DIR$/src/main/java/tpcryptoavaceevierge/Mailsendreceivetest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tpcryptoavaceevierge/Mailsendreceivetest.java" afterDir="false" />
+    <list default="true" id="7b0f5b74-9b71-46ea-b86c-b76631f4ee0c" name="Changes" comment="feat/Crypto: add jars to the git repo">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copyright/nfsnk.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/Autority/KeyPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/Autority/KeyPair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/Autority/SettingParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/Autority/SettingParameters.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/ClientsMail/IBEBasicIdent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/ClientsMail/IBEBasicIdent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/ClientsMail/IBEcipher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/ClientsMail/IBEcipher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/Test/AESCrypto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/Test/AESCrypto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/Test/TestIBEAES.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/Test/TestIBEAES.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/src/main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/Mailsendreceivetest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/src/Mailsendreceivetest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/src/Reply2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/src/Reply2.java" afterDir="false" />
     </list>
+    <list id="7e648f90-7016-46f3-a2a9-64f24f210203" name="untracked files" comment="untracked files" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -20,9 +37,22 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="develop" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feat/Crypto_initial-commit-branch" />
+        <entry key="$PROJECT_DIR$" value="feat/sendreceive-mails" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -49,20 +79,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/befat/OneDrive/Bureau/ICy_2/Fondements IA/TP/projet&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/befat/OneDrive/Bureau/ICy_2/Fondements IA/TP/projet",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "editor.preferences.import"
   }
-}</component>
-  <component name="RunManager">
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\befat\OneDrive\Bureau\ICy_2\Crypto avancee\TP\ProjetCrypto\src\main\java" />
+      <recent name="C:\Users\befat\OneDrive\Bureau\ICy_2\Crypto avancee\TP\ProjetCrypto\src\src" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Mailsendreceivetest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="tpcryptoavaceevierge.Mailsendreceivetest" />
       <module name="ProjetCrypto" />
@@ -76,8 +113,31 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Main" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="src.main" />
+      <module name="ProjetCrypto" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Mailsendreceivetest" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Mailsendreceivetest" />
         <item itemvalue="Application.Mailsendreceivetest" />
         <item itemvalue="Application.Mailsendreceivetest" />
         <item itemvalue="Application.Mailsendreceivetest" />
@@ -96,6 +156,7 @@
       <workItem from="1677602658162" duration="6469000" />
       <workItem from="1677833358920" duration="422000" />
       <workItem from="1678525725835" duration="4786000" />
+      <workItem from="1678816046002" duration="5761000" />
     </task>
     <task id="LOCAL-00001" summary="feat/Crypto: initial commit">
       <created>1677598754047</created>
@@ -135,6 +196,21 @@
                 </map>
               </option>
             </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="develop" />
+                </option>
+              </RecentGroup>
+            </list>
           </value>
         </entry>
       </map>

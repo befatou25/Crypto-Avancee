@@ -1,19 +1,20 @@
+package SecuritySysteme.Test;
 
+import SecuritySysteme.Autority.KeyPair;
+import SecuritySysteme.Autority.SettingParameters;
+import SecuritySysteme.ClientsMail.IBEBasicIdent;
+import SecuritySysteme.ClientsMail.IBEcipher;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class TestIBEAES {
 
@@ -49,21 +50,21 @@ public class TestIBEAES {
 
             System.out.println("to access the resulting file check the following path: " + f.getAbsolutePath());
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvalidKeyException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BadPaddingException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -101,12 +102,12 @@ public class TestIBEAES {
 
             System.out.println("-----------------------------");
 
-            IBEalltypeoffilesEncryptiondecryptiondemo(pairing, sp, keys, "C:\\Users\\pc\\OneDrive\\Images\\projet\\applicationDeChat.png""); // démo de chiffrement/déchiffrement
+            IBEalltypeoffilesEncryptiondecryptiondemo(pairing, sp, keys, "C:\\Users\\pc\\OneDrive\\Images\\projet\\applicationDeChat.png"); // démo de chiffrement/déchiffrement
 
             System.out.println("Fin ....");
 
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Crypto-Avancee.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestIBEAES.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

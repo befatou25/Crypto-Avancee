@@ -1,5 +1,7 @@
-
+package SecuritySysteme.Autority;
 //Key gen Phase
+
+import it.unisa.dia.gas.jpbc.Element;
 
 public class KeyPair {
 

@@ -1,15 +1,17 @@
+package SecuritySysteme.ClientsMail;
 
+import SecuritySysteme.Autority.KeyPair;
+import SecuritySysteme.Autority.SettingParameters;
+import SecuritySysteme.Test.AESCrypto;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 public class IBEBasicIdent {
 
@@ -24,7 +26,7 @@ public class IBEBasicIdent {
         return new SettingParameters(p, p_pub, msk); //instanciation d'un objet comportant les parametres du système
     }
 
-    public static KeyPair keygen(Pairing pairing,Element msk, String id) throws NoSuchAlgorithmException{
+    public static KeyPair keygen(Pairing pairing, Element msk, String id) throws NoSuchAlgorithmException{
 
         byte [] bytes=id.getBytes(); // représentation de l'id sous format binaire
 
@@ -71,7 +73,7 @@ public class IBEBasicIdent {
 
         byte[] V=Xor(aeskey.toBytes(), pairingresult.toBytes()); //K xor e(Q_id,P_pub)^r
 
-        byte[] Aescipher=AESCrypto.encrypt(message, aeskey.toBytes());  // chiffrement AES
+        byte[] Aescipher= AESCrypto.encrypt(message, aeskey.toBytes());  // chiffrement AES
 
         return new IBEcipher(U, V, Aescipher); //instaciation d'un objet representant un ciphertext hybride combinant (BasicID et AES)
     }
