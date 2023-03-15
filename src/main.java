@@ -1,46 +1,69 @@
+import src.Mailsendreceivetest;
+
 import java.util.Scanner;
 
 import static src.Mailsendreceivetest.downloadEmailAttachments;
 import static src.Mailsendreceivetest.sendmessage;
 import static src.Mailsendreceivetest.sendmessagewithattachement;
 import static src.Reply2.Reply2;
-import static src.Informations.CollectInfo;
+
 
 public class main {
     public static void main(String[] args)  {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Veuillez entrez l'adresse mail d'envoie : ");
-        String username = scanner.next();
+        String usernamesend = scanner.next();
 
         System.out.println("Veuillez entrez le mdp du mail d'envoie : ");
-        String password = scanner.next();
+        String passwordsend = scanner.next();
 
         System.out.println("Veuillez entrez l'adresse mail de réception : ");
-        String destination = scanner.next();
+        String destinationsend = scanner.next();
 
-        System.out.println("Les informations entrées sont les suivantes : \n " + username + "\n" + password + "\n" + destination);
+        //System.out.println("Les informations entrées sont les suivantes : \n " + username + "\n" + password + "\n" + destination);
 
-        scanner.close();
+
         //String host = "outlook.office365.com";//change accordingly
-        /**String username= "projetcrypto23@outlook.fr";
-        String password= "projetCrypto2023*";//change accordingly
-        String destination = "khaoulaaitka10@gmail.com";**/
+        /**Pour le test :
+          usernamesendsend= "projetcrypto23@outlook.fr";
+          passwordsend= "projetCrypto2023*";
+          destinationsend = testcrypto23@outlook.fr;
+          *******************************************
+          usernamereply = testcrypto23@outlook.fr;
+          passwordreply = testcryptogra23*;
+          destinationreply = projetcrypto23@outlook.fr
+         **/
         //sendmessage(username, password, destination);
 
         String path="C:\\Users\\khawla\\Desktop\\Study\\S8\\Crypto_Avancée\\Cours\\Cours IBE.pptx";
 
-        sendmessagewithattachement(username, password, destination,path);
+        sendmessagewithattachement(usernamesend, passwordsend, destinationsend,path);
 
         System.out.println("message sent ...");
 
-        Scanner sc=new Scanner(System.in);
-        System.out.println("type something ....");
-
-        sc.nextLine();
+        //Scanner sc=new Scanner(System.in);
+        //System.out.println("type something ....");
+        //sc.nextLine();
 
         //downloadEmailAttachments(username, password);
         System.out.println("**********Maintenant je vais répondre à l'email***********");
-        Reply2(username,password,destination);
+
+        Scanner scanner2 = new Scanner(System.in);
+
+
+        System.out.println("Veuillez entrez l'adresse mail d'envoie de la réponse : ");
+        String usernamereply = scanner2.next();
+
+        System.out.println("Veuillez entrez le mdp du mail d'envoie de la réponse : ");
+        String passwordreply = scanner2.next();
+
+        System.out.println("Veuillez entrez l'adresse mail de réception  de la réponse : ");
+        String destinationreply = scanner2.next();
+
+        scanner.close();
+        scanner2.close();
+
+        Reply2(usernamereply,passwordreply,destinationreply);
     }
 }
