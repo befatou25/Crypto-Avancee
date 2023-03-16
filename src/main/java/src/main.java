@@ -56,12 +56,12 @@ public class main {
         System.out.println("Veuillez entrez le mdp du mail d'envoie de la réponse : ");
         String passwordreply = scanner2.next();
 
-        System.out.println("Veuillez entrez l'adresse mail de réception  de la réponse : ");
-        String destinationreply = scanner2.next();
+        /*System.out.println("Veuillez entrez l'adresse mail de réception  de la réponse : ");
+        String destinationreply = scanner2.next();*/
 
         scanner.close();
         scanner2.close();
 
-        Reply2(usernamereply,passwordreply,destinationreply);
+        Reply2(usernamereply, passwordreply);
     }
 }

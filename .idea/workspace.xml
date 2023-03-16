@@ -4,21 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b0f5b74-9b71-46ea-b86c-b76631f4ee0c" name="Changes" comment="feat/Crypto: add jars to the git repo">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copyright/nfsnk.xml" afterDir="false" />
+    <list default="true" id="7b0f5b74-9b71-46ea-b86c-b76631f4ee0c" name="Changes" comment="feat/SendReceiveMail: move folders to the right directories to allow testing">
       <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/Autority/KeyPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/Autority/KeyPair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/Autority/SettingParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/Autority/SettingParameters.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/ClientsMail/IBEBasicIdent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/ClientsMail/IBEBasicIdent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/ClientsMail/IBEcipher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/ClientsMail/IBEcipher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/Test/AESCrypto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/Test/AESCrypto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SecuritySysteme/Test/TestIBEAES.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SecuritySysteme/Test/TestIBEAES.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/src/main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/Mailsendreceivetest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/src/Mailsendreceivetest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/Reply2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/src/Reply2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/src/Reply2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/src/Reply2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/src/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/src/main.java" afterDir="false" />
     </list>
     <list id="7e648f90-7016-46f3-a2a9-64f24f210203" name="untracked files" comment="untracked files" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,20 +70,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/befat/OneDrive/Bureau/ICy_2/Fondements IA/TP/projet",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "editor.preferences.import"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/befat/OneDrive/Bureau/ICy_2/Fondements IA/TP/projet&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\befat\OneDrive\Bureau\ICy_2\Crypto avancee\TP\ProjetCrypto\src\main\java" />
@@ -156,7 +147,7 @@
       <workItem from="1677602658162" duration="6469000" />
       <workItem from="1677833358920" duration="422000" />
       <workItem from="1678525725835" duration="4786000" />
-      <workItem from="1678816046002" duration="5761000" />
+      <workItem from="1678816046002" duration="12353000" />
     </task>
     <task id="LOCAL-00001" summary="feat/Crypto: initial commit">
       <created>1677598754047</created>
@@ -172,7 +163,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677677557120</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat/SendReceiveMail: move folders to the right directories to allow testing">
+      <created>1678887763525</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1678887763525</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,6 +217,33 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat/Crypto: initial commit" />
     <MESSAGE value="feat/Crypto: initial commit w/ teacher's example" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat/Crypto: initial commit w/ teacher's example" />
+    <MESSAGE value="feat/SendReceiveMail: move folders to the right directories to allow testing" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat/SendReceiveMail: move folders to the right directories to allow testing" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/src/Reply2.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/src/main.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/src/Reply2.java</url>
+          <line>33</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/src/Reply2.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
