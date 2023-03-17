@@ -1,11 +1,14 @@
-package srcBis;
+import src.Mailsendreceivetest;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.Scanner;
 
-import static src.Mailsendreceivetest.sendmessagewithattachement;
-import static srcBis.Reply2Bis.NumMail;
+import static src.Mailsendreceivetest.*;
+import static src.Reply2.NumMail;
+import static src.Reply2.Reply2;
 
-public class MainBis {
+public class main {
     public static void main(String[] args)  {
 
         Scanner scanner = new Scanner(System.in);
@@ -23,21 +26,24 @@ public class MainBis {
 
         //String host = "outlook.office365.com";//change accordingly
         /**Pour le test :
-         usernamesendsend= "projetcrypto23@outlook.fr";
-         passwordsend= "projetCrypto2023*";
-         destinationsend = testcrypto23@outlook.fr;
-         *******************************************
-         usernamereply = testcrypto23@outlook.fr;
-         passwordreply = testcryptogra23*;
-         destinationreply = projetcrypto23@outlook.fr**/
+          usernamesendsend= "projetcrypto23@outlook.fr";
+          passwordsend= "projetCrypto2023*";
+          destinationsend = testcrypto23@outlook.fr;
+          *******************************************
+          usernamereply = testcrypto23@outlook.fr;
+          passwordreply = testcryptogra23*;
+          destinationreply = projetcrypto23@outlook.fr**/
 
         //sendmessage(username, password, destination);
 
-        String path="C:\\Users\\befat\\OneDrive\\Bureau\\img.jpg";
+        String path="C:\\Users\\khawla\\Desktop\\Study\\S8\\IAFL\\Cours\\IAFL.pdf";
 
         sendmessagewithattachement(usernamesend, passwordsend, destinationsend,path);
 
         System.out.println("message sent ...");
+
+        NumMail(usernamesend,passwordsend);
+
 
         //Scanner sc=new Scanner(System.in);
         //System.out.println("type something ....");
@@ -45,6 +51,7 @@ public class MainBis {
 
         //downloadEmailAttachments(username, password);
         System.out.println("**********Maintenant je vais répondre à l'email***********");
+
 
         Scanner scanner2 = new Scanner(System.in);
 
@@ -58,22 +65,26 @@ public class MainBis {
         //System.out.println("Veuillez entrez l'adresse mail de réception  de la réponse : ");
         //String destinationreply = scanner2.next();
 
-        scanner.close();
-        scanner2.close();
+
 
         //Reply2(usernamereply,passwordreply,destinationreply);
 
         /**String usernamereply = "testcrypto23@outlook.fr";
-         String passwordreply = "testcryptogra23*";**/
+        String passwordreply = "testcryptogra23*";**/
 
 
-        NumMail(usernamereply,passwordreply);
+
         Scanner sc = new Scanner(System.in);
-        System.out.println("Veuillez entrez l'id du mail auquel vous voulez répondre 2 : ");
-        //String IDMail = sc.next();
+        System.out.println("Veuillez entrez l'id du mail auquel vous voulez répondre : ");
+        String IDMail = sc.next();
         //Reply2(usernamereply,passwordreply, sc);
 
-        Reply2Bis.Reply2(usernamereply,passwordreply, sc);
+        Reply2(usernamereply,passwordreply, IDMail);
+
+        scanner.close();
+        scanner2.close();
         sc.close();
+
+
     }
 }
