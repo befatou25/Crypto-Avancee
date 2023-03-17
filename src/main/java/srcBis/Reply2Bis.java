@@ -1,21 +1,28 @@
-package srcBis;
+package src;
 
 import javax.mail.*;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
+import javax.mail.Address;
 
 
-public class Reply2Bis {
-    public static void Reply2(String username, String password, Scanner messageId){
+public class Reply2 {
+    //**********************************************************************************************
+
+    public static void Reply2(String username, String password, String messageId){
         Properties properties = new Properties();
 
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.outlook.com");
         properties.put("mail.smtp.port", "587");
+        properties.put("mail.imap.host", "outlook.office365.com");
+        properties.put("mail.imap.port", "993");
+        properties.setProperty("mail.imap.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        properties.setProperty("mail.imap.socketFactory.fallback","false");
+        properties.setProperty("mail.imap.socketFactory.port", "993");
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username,password);
@@ -26,30 +33,49 @@ public class Reply2Bis {
             /**Scanner sc = new Scanner(System.in);
              System.out.println("Veuillez entrez l'id du mail auquel vous voulez répondre : ");
              String IDMail = sc.next();**/
+
+
+
             Store store = session.getStore("imap");
             store.connect(username, password);
             Folder inbox = store.getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
-            MimeMessage[] messages = (MimeMessage[]) inbox.getMessages();
+            Message[] messages = inbox.getMessages();
             for (int i = 0; i < messages.length; i++) {
-                if (messages[i].getMessageID().equals(messageId)) {
-                    MimeMessage message = (MimeMessage) messages[i];
-                    Message reply = new MimeMessage(session);
-                    reply = (MimeMessage) message.reply(false);
-                    reply.setText("Votre réponse ici.");
+                String messageID = ((MimeMessage) messages[i]).getMessageID();
+                System.out.println("Voici l'id entré : " +messageId);
+                System.out.println("** Voila les ids des mails : " + messageID);
+                if (messageID != null && messageID.equals(messageId)) {
+                //if (((MimeMessage) messages[i]).getMessageID().equals(messageId)) {
+                    //MimeMessage message = (MimeMessage) messages[i];
+                    System.out.println("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+                    //new MimeMessage(session);
+                    //MimeMessage reply;
+                    MimeMessage reply=new MimeMessage(session);
+                    System.out.println("haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                    //reply = (MimeMessage) message.reply(false);
+                    reply.setReplyTo(new Address[] { new InternetAddress(username) });
+                    System.out.println("hoooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+                    reply.setText("Votre réponse ici.......");
                     Transport.send(reply);
                     System.out.println("Réponse envoyée avec succès.");
                     break;
+                } else {
+                    System.out.println("ERROOOOOOOOOOOOOOOR : Y'a un souciiiiiiiiiis avec ton ID Meuf");
                 }
             }
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+
     }
+    //**********************************************************************************************
 
-    public static List<Message> NumMail(String username, String password) {
 
-        List<Message> messages = new ArrayList<>();
+
+    public static List<String> NumMail(String username, String password) {
+
+        List<String> messages = new ArrayList<>();
 
         try {
             Properties properties = new Properties();
@@ -69,13 +95,16 @@ public class Reply2Bis {
             Message[] arrayMessages = folderInbox.getMessages();
 
             for (int i = 0; i < arrayMessages.length; i++) {
-                MimeMessage message =  (MimeMessage) arrayMessages[i];
+                MimeMessage message = (MimeMessage) arrayMessages[i];
                 String msgID = message.getMessageID(); // obtenir l'ID unique du message
-                System.out.println("************* Voici l'ID du mail : " + msgID);
+                System.out.println("* Voici l'ID du mail : " + msgID);
+                messages.add(msgID);
                 Address[] fromAddress = message.getFrom();
                 String from = fromAddress[0].toString();
-                System.out.println("************* Voici d'où provient le mail : " + from);
+                System.out.println("* Voici d'où provient le mail : " + from);
             }
+
+            System.out.println(messages);
 
             folderInbox.close(false); // ferme la boîte aux lettres sans supprimer les messages
             store.close(); // ferme la connexion à la boîte aux lettres
