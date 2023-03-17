@@ -1,13 +1,11 @@
-import src.Mailsendreceivetest;
+package srcBis;
 
-import javax.mail.MessagingException;
 import java.util.Scanner;
 
-import static src.Mailsendreceivetest.*;
-import static src.Reply2.NumMail;
-import static src.Reply2.Reply2;
+import static src.Mailsendreceivetest.sendmessagewithattachement;
+import static srcBis.Reply2Bis.NumMail;
 
-public class main {
+public class MainBis {
     public static void main(String[] args)  {
 
         Scanner scanner = new Scanner(System.in);
@@ -25,17 +23,17 @@ public class main {
 
         //String host = "outlook.office365.com";//change accordingly
         /**Pour le test :
-          usernamesendsend= "projetcrypto23@outlook.fr";
-          passwordsend= "projetCrypto2023*";
-          destinationsend = testcrypto23@outlook.fr;
-          *******************************************
-          usernamereply = testcrypto23@outlook.fr;
-          passwordreply = testcryptogra23*;
-          destinationreply = projetcrypto23@outlook.fr**/
+         usernamesendsend= "projetcrypto23@outlook.fr";
+         passwordsend= "projetCrypto2023*";
+         destinationsend = testcrypto23@outlook.fr;
+         *******************************************
+         usernamereply = testcrypto23@outlook.fr;
+         passwordreply = testcryptogra23*;
+         destinationreply = projetcrypto23@outlook.fr**/
 
         //sendmessage(username, password, destination);
 
-        String path="C:\\Users\\khawla\\Desktop\\Study\\S8\\Crypto_Avancée\\Cours\\Cours IBE.pptx";
+        String path="C:\\Users\\befat\\OneDrive\\Bureau\\img.jpg";
 
         sendmessagewithattachement(usernamesend, passwordsend, destinationsend,path);
 
@@ -66,7 +64,7 @@ public class main {
         //Reply2(usernamereply,passwordreply,destinationreply);
 
         /**String usernamereply = "testcrypto23@outlook.fr";
-        String passwordreply = "testcryptogra23*";**/
+         String passwordreply = "testcryptogra23*";**/
 
 
         NumMail(usernamereply,passwordreply);
@@ -75,7 +73,7 @@ public class main {
         //String IDMail = sc.next();
         //Reply2(usernamereply,passwordreply, sc);
 
-        Reply2(usernamereply,passwordreply, sc);
+        Reply2Bis.Reply2(usernamereply,passwordreply, sc);
         sc.close();
     }
 }

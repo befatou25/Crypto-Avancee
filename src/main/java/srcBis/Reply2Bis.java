@@ -1,13 +1,14 @@
-package src;
+package srcBis;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.*;
-import javax.mail.Address;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Scanner;
 
 
-public class Reply2 {
+public class Reply2Bis {
     public static void Reply2(String username, String password, Scanner messageId){
         Properties properties = new Properties();
 
