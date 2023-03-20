@@ -1,9 +1,9 @@
-package SecuritySysteme.Test;
+package securitySysteme.Test;
 
-import SecuritySysteme.Autority.KeyPair;
-import SecuritySysteme.Autority.SettingParameters;
-import SecuritySysteme.ClientsMail.IBEBasicIdent;
-import SecuritySysteme.ClientsMail.IBEcipher;
+import securitySysteme.autority.KeyPair;
+import securitySysteme.autority.SettingParameters;
+import securitySysteme.ClientsMail.IBEBasicIdent;
+import securitySysteme.ClientsMail.IBEcipher;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 
@@ -72,7 +72,7 @@ public class TestIBEAES {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        Pairing pairing = PairingFactory.getPairing("Curve\\a.properties"); // chargement des paramètres de la courbe elliptique
+        Pairing pairing = PairingFactory.getPairing("src/main/resources/curves/a.properties"); // chargement des paramètres de la courbe elliptique
         // la configuration A offre un pairing symmetrique ce qui correspond à l'implementation du schema basicID
         // qui est basé sur l'utilisation du pairing symmetrique
         System.out.println("Setup ....");
@@ -87,7 +87,7 @@ public class TestIBEAES {
 
         System.out.println("MSK:" + sp.getMsk());
 
-        String id = "youcef.imine@gmail.com"; // id de test
+        String id = "projetcrypto23@outlook.fr"; // id de test
 
         System.out.println("-----------------------------");
 
@@ -102,7 +102,7 @@ public class TestIBEAES {
 
             System.out.println("-----------------------------");
 
-            IBEalltypeoffilesEncryptiondecryptiondemo(pairing, sp, keys, "C:\\Users\\pc\\OneDrive\\Images\\projet\\applicationDeChat.png"); // démo de chiffrement/déchiffrement
+            IBEalltypeoffilesEncryptiondecryptiondemo(pairing, sp, keys, "C:\\Users\\befat\\OneDrive\\Bureau\\img.jpg"); // démo de chiffrement/déchiffrement
 
             System.out.println("Fin ....");
 

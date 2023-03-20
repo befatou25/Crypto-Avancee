@@ -1,4 +1,4 @@
-package SecuritySysteme.Autority;
+package securitySysteme.autority;
 //Set Up Phase
 
 import it.unisa.dia.gas.jpbc.Element;

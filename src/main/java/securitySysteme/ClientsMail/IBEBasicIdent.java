@@ -1,8 +1,8 @@
-package SecuritySysteme.ClientsMail;
+package securitySysteme.ClientsMail;
 
-import SecuritySysteme.Autority.KeyPair;
-import SecuritySysteme.Autority.SettingParameters;
-import SecuritySysteme.Test.AESCrypto;
+import securitySysteme.autority.KeyPair;
+import securitySysteme.autority.SettingParameters;
+import securitySysteme.Test.AESCrypto;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 
