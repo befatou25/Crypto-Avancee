@@ -10,9 +10,9 @@ import securitySysteme.ClientsMail.IBEBasicIdent;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FromTerm;
 import javax.mail.search.SearchTerm;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Properties;
 import java.util.Random;
@@ -33,8 +33,8 @@ public class Authentication {
         return random.nextInt(999999);
     }
 
-    public static int sendConfirmationMail (String id) {
-        Properties properties = new Properties();
+    public static int sendConfirmationMail(String id) {
+        var properties = new Properties();
 
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -43,10 +43,10 @@ public class Authentication {
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(trustedauthority,trustedauthorityPassword);
+                return new PasswordAuthentication(trustedauthority, trustedauthorityPassword);
             }
         });
-        System.out.println("session.getProviders():"+session.getProviders()[0].getType());
+        System.out.println("session.getProviders():" + session.getProviders()[0].getType());
 
         try {
             // Création de l'e-mail
@@ -73,98 +73,93 @@ public class Authentication {
         StringBuffer f = new StringBuffer(); // buffer to store numbers
 
         for (int i = 0; i < n.length; i++) {
-            if((n[i].matches("[0-9]+"))) {// validating numbers
+            if ((n[i].matches("[0-9]+"))) {// validating numbers
                 f.append(n[i]); //appending
-            }else {
+            } else {
                 //parsing to int and returning value
                 return Integer.parseInt(f.toString());
             }
         }
         return 0;
     }
-    public static int confirmConfirmationCode(String id) {
-        Properties properties = new Properties();
+
+    public static int confirmConfirmationCode(String id) throws Exception {
+        var properties = new Properties();
 
         // server setting (it can be pop3 too
         properties.put("mail.imap.host", "outlook.office365.com");
         properties.put("mail.imap.port", "993");
         properties.setProperty("mail.imap.socketFactory.class",
                 "javax.net.ssl.SSLSocketFactory");
-        properties.setProperty("mail.imap.socketFactory.fallback","false");
+        properties.setProperty("mail.imap.socketFactory.fallback", "false");
         properties.setProperty("mail.imap.socketFactory.port", "993");
 
-
-        Session session = Session.getDefaultInstance(properties);
-
         int receivedConfirmationCode = 0;
+        SearchTerm sender = new FromTerm(new InternetAddress(id));
 
-        try {
-            // connects to the message store imap or pop3
-            //     Store store = session.getStore("pop3");
+        while (true) {
+            Session session = Session.getDefaultInstance(properties);
             Store store = session.getStore("imap");
-
             store.connect(trustedauthority, trustedauthorityPassword);
-
-            // opens the inbox folder
             Folder folderInbox = store.getFolder("INBOX");
             folderInbox.open(Folder.READ_ONLY);
-            // fetches new messages from server
-
-            SearchTerm sender = new FromTerm(new InternetAddress(id));
             Message[] arrayMessages = folderInbox.search(sender);
 
-            Message lastMessage = arrayMessages[arrayMessages.length -1];
-            String from = id;
-            String subject = lastMessage.getSubject();
-            String sentDate = lastMessage.getSentDate().toString();
-            String contentType = lastMessage.getContentType();
-            String messageContent = "";
-            boolean message_seen=lastMessage.getFlags().contains(Flags.Flag.SEEN);
 
-            if (contentType.contains("text/plain")
-                    || contentType.contains("text/html")) {
-                Object content = lastMessage.getContent();
-                if (content != null) {
-                    messageContent = content.toString();
+            if (arrayMessages.length > 0) {
+                Message lastMessage = arrayMessages[arrayMessages.length -1];
+                String contentType = lastMessage.getContentType();
+                String messageContent = "";
+
+                if (contentType.contains("multipart/")) {
+                    MimeMultipart multipart = (MimeMultipart) lastMessage.getContent();
+                    for (int i = 0; i < multipart.getCount(); i++) {
+                        BodyPart bodyPart = multipart.getBodyPart(i);
+                        if (bodyPart.getContentType().contains("text/plain")) {
+                            Object content = bodyPart.getContent();
+                            if (content != null) {
+                                messageContent = content.toString();
+                                receivedConfirmationCode = getNumbers(messageContent);
+
+                            }
+                        }
+                    }
                 }
-            }
-/*
-            System.out.println("message seen ?:"+message_seen);
-            System.out.println("\t From: " + from);
-            System.out.println("\t Subject: " + subject);
-            System.out.println("\t Sent Date: " + sentDate);
-            System.out.println("\t Message: " + messageContent);*/
 
-            int receivedCode = getNumbers(messageContent);
-            receivedConfirmationCode = receivedCode;
-            /*if (receivedCode == ConfirmationCode) {
-                System.out.println("Meme code");
-            }else {
-                System.out.println(ConfirmationCode);
-                System.out.println("Pas meme code");
-            }*/
+                if (contentType.contains("text/plain")
+                        || contentType.contains("text/html")) {
+                    Object content = lastMessage.getContent();
+                    if (content != null) {
+                        messageContent = content.toString();
+                        receivedConfirmationCode = getNumbers(messageContent);
+                    }
+                }
+                break;
+            }
+
+            Thread.sleep(10000);
 
             // disconnect
             folderInbox.close(false);
             store.close();
-        } catch (NoSuchProviderException ex) {
-            System.out.println("No provider for imap.");
-            ex.printStackTrace();
-        } catch (MessagingException ex) {
-            System.out.println("Could not connect to the message store");
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
 
-        return receivedConfirmationCode;
+            return receivedConfirmationCode;
     }
 
-    public static void main(String[] args) {
-        //int sentConfirmationCode = sendConfirmationMail("projetcrypto23@outlook.fr");
+
+
+    public static void main(String[] args) throws Exception {
+        int sentConfirmationCode = sendConfirmationMail("projetcrypto23@outlook.fr");
+       System.out.println("Starting...");
+        try {
+            Thread.sleep(30000); // wait for 0.5 min
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         int receivedConfirmationCode = confirmConfirmationCode("projetcrypto23@outlook.fr");
-        //System.out.println("Sent = " +sentConfirmationCode + "\nReceived = " +receivedConfirmationCode);
-        System.out.println("\nReceived = " +receivedConfirmationCode);
+        System.out.println("Sent = " +sentConfirmationCode + "\nReceived = " +receivedConfirmationCode);
+        //System.out.println("\nReceived = " +receivedConfirmationCode);
     }
 
     public KeyPair authentication (String id) {
