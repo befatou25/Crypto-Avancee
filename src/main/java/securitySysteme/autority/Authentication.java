@@ -1,8 +1,5 @@
 package securitySysteme.autority;
 
-import it.unisa.dia.gas.jpbc.Element;
-import it.unisa.dia.gas.jpbc.ElementPowPreProcessing;
-import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import securitySysteme.ClientsMail.IBEBasicIdent;
@@ -12,27 +9,55 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FromTerm;
-import javax.mail.search.SearchTerm;
-import java.math.BigInteger;
-import java.util.Properties;
-import java.util.Random;
+import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.*;
 
 public class Authentication {
 
-    public static final String trustedauthority = "autoritedeconfiance@outlook.com";
-    public static final String trustedauthorityPassword = "AutoriteConfiance2023*";
+    public static final String TRUSTEDAUTHORITY = "autoritedeconfiance@outlook.com";
+    public static final String TRUSTEDAUTHORITYPASSWORD = "AutoriteConfiance2023*";
     public static final Pairing pairing = PairingFactory.getPairing("src/main/resources/curves/a.properties"); // chargement des paramètres de la courbe elliptique
-    // la configuration A offre un pairing symmetrique ce qui correspond à l'implementation du schema basicID
-    // qui est basé sur l'utilisation du pairing symmetrique
+    // la configuration A offre un pairing symetrique ce qui correspond à l'implementation du schema basicID
+    // qui est basé sur l'utilisation du pairing symetrique
     public static final SettingParameters sp = IBEBasicIdent.setup(pairing);
+    public static final int CONFIRMATIONCODE = generateConfirmationCode();
 
-    public static final int ConfirmationCode = generateConfirmationCode();
 
+    /**
+     * This method generates a random number that will be used as the confirmation code of a client
+     * */
     private static int generateConfirmationCode() {
-        Random random = new Random();
-        return random.nextInt(999999);
+        Random rand = new Random();
+        return rand.nextInt(999999);
     }
 
+    /**
+     * This method returns the first number of a given string
+     * */
+    static int getNumbers(String s) {
+
+        String[] n = s.split(""); //array of strings
+        StringBuilder f = new StringBuilder(); // buffer to store numbers
+
+        for (String value : n) {
+            if ((value.matches("\\d+"))) { // validating numbers
+                f.append(value); //appending
+            } else {
+                //parsing to int and returning value
+                return Integer.parseInt(f.toString());
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * This method sends a confirmation code via an e-mail to the client with id as the mail address
+     *  It returns the CONFIRMATIONCODE sent in order to be able to perform comparison with the code the authority
+     *  will receive from the client.
+      */
     public static int sendConfirmationMail(String id) {
         var properties = new Properties();
 
@@ -43,7 +68,7 @@ public class Authentication {
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(trustedauthority, trustedauthorityPassword);
+                return new PasswordAuthentication(TRUSTEDAUTHORITY, TRUSTEDAUTHORITYPASSWORD);
             }
         });
         System.out.println("session.getProviders():" + session.getProviders()[0].getType());
@@ -51,39 +76,24 @@ public class Authentication {
         try {
             // Création de l'e-mail
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(trustedauthority));
+            message.setFrom(new InternetAddress(TRUSTEDAUTHORITY));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(id));
             message.setSubject("Code de confirmation");
-            message.setText("Votre code de confirmation est : " + ConfirmationCode + "\nVeuillez répondre à ce mail en entrant votre code");
+            message.setText("Votre code de confirmation est : " + CONFIRMATIONCODE + "\nVeuillez répondre à ce mail en entrant votre code");
 
             // Envoi de l'e-mail
             Transport.send(message);
 
-            System.out.println("L'e-mail a été envoyé avec succès.");
+            System.out.println("L'e-mail avec le code de confirmation a été envoyé avec succès.");
 
         } catch (MessagingException e) {
-            System.out.println("Une erreur s'est produite lors de l'envoi de l'e-mail : " + e.getMessage());
+            System.out.println("Une erreur s'est produite lors de l'envoi de l'e-mail de confirmation : " + e.getMessage());
         }
-        return ConfirmationCode;
+        return CONFIRMATIONCODE;
     }
 
-    static int getNumbers(String s) {
 
-        String[] n = s.split(""); //array of strings
-        StringBuffer f = new StringBuffer(); // buffer to store numbers
-
-        for (int i = 0; i < n.length; i++) {
-            if ((n[i].matches("[0-9]+"))) {// validating numbers
-                f.append(n[i]); //appending
-            } else {
-                //parsing to int and returning value
-                return Integer.parseInt(f.toString());
-            }
-        }
-        return 0;
-    }
-
-    public static int confirmConfirmationCode(String id) throws Exception {
+    public static List<Object> confirmConfirmationCode(String id) throws MessagingException, IOException, InterruptedException {
         var properties = new Properties();
 
         // server setting (it can be pop3 too
@@ -94,44 +104,44 @@ public class Authentication {
         properties.setProperty("mail.imap.socketFactory.fallback", "false");
         properties.setProperty("mail.imap.socketFactory.port", "993");
 
-        int receivedConfirmationCode = 0;
-        SearchTerm sender = new FromTerm(new InternetAddress(id));
+        var clientResponse = new ArrayList<>();
+        var receivedConfirmationCode = 0;
+        var receivedClientPublicKey = "";
+        var sender = new FromTerm(new InternetAddress(id));
 
         while (true) {
             Session session = Session.getDefaultInstance(properties);
             Store store = session.getStore("imap");
-            store.connect(trustedauthority, trustedauthorityPassword);
+            store.connect(TRUSTEDAUTHORITY, TRUSTEDAUTHORITYPASSWORD);
             Folder folderInbox = store.getFolder("INBOX");
             folderInbox.open(Folder.READ_ONLY);
             Message[] arrayMessages = folderInbox.search(sender);
 
 
             if (arrayMessages.length > 0) {
-                Message lastMessage = arrayMessages[arrayMessages.length -1];
-                String contentType = lastMessage.getContentType();
-                String messageContent = "";
+                var lastMessage = arrayMessages[arrayMessages.length -1];
+                var contentType = lastMessage.getContentType();
+                var messageContent = "";
 
                 if (contentType.contains("multipart/")) {
-                    MimeMultipart multipart = (MimeMultipart) lastMessage.getContent();
+                    var multipart = (MimeMultipart) lastMessage.getContent();
                     for (int i = 0; i < multipart.getCount(); i++) {
-                        BodyPart bodyPart = multipart.getBodyPart(i);
-                        if (bodyPart.getContentType().contains("text/plain")) {
-                            Object content = bodyPart.getContent();
+                        var bodyPart = multipart.getBodyPart(i);
+                        if (bodyPart.getContentType().contains("text/plain") || bodyPart.getContentType().contains("text/html")) {
+                            var content = bodyPart.getContent();
                             if (content != null) {
                                 messageContent = content.toString();
-                                receivedConfirmationCode = getNumbers(messageContent);
+                                if (receivedConfirmationCode == 0) {
+                                    receivedConfirmationCode = getNumbers(messageContent);
+                                }
 
                             }
                         }
-                    }
-                }
-
-                if (contentType.contains("text/plain")
-                        || contentType.contains("text/html")) {
-                    Object content = lastMessage.getContent();
-                    if (content != null) {
-                        messageContent = content.toString();
-                        receivedConfirmationCode = getNumbers(messageContent);
+                        if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
+                            var clientPublicKeyStream = bodyPart.getInputStream();
+                            var receivedClientPublicKeyBytes = clientPublicKeyStream.readAllBytes();
+                            receivedClientPublicKey = new String(receivedClientPublicKeyBytes);
+                        }
                     }
                 }
                 break;
@@ -143,220 +153,57 @@ public class Authentication {
             folderInbox.close(false);
             store.close();
         }
+        clientResponse.add(receivedConfirmationCode);
+        clientResponse.add(receivedClientPublicKey);
 
-            return receivedConfirmationCode;
+        return clientResponse;
     }
 
+    public static boolean verifyAuthentication(String id) throws MessagingException, IOException, InterruptedException {
+        int sentConfirmationCode = sendConfirmationMail(id);
+        System.out.println("Waiting 1 min for client's response...");
+        try {
+            Thread.sleep(60000); // wait for 1 min
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+        return sentConfirmationCode == (int) confirmConfirmationCode(id).get(0);
+    }
+
+    public static PublicKey parsePublicKey(String publicKeyString) throws Exception {
+        byte[] publicKeyBytes = new byte[publicKeyString.length() / 2];
+        for (int i = 0; i < publicKeyString.length(); i += 2) {
+            publicKeyBytes[i / 2] = (byte) ((Character.digit(publicKeyString.charAt(i), 16) << 4) + Character.digit(publicKeyString.charAt(i+1), 16));
+        }
+
+        // Create a PublicKey object from the byte array
+        KeyFactory keyFactory = KeyFactory.getInstance("DiffieHellman");
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+        PublicKey clientPublicKey = keyFactory.generatePublic(keySpec);
+
+        // Generate a public key object from the public key specification and return it
+        return clientPublicKey;
+    }
+
+    public static PublicKey getClientsDHPublicKey(String id) throws Exception {
+        String clientsDHPublicKeyString = (String) confirmConfirmationCode(id).get(1);
+        byte[] clientsDHPublicKeyBytes = clientsDHPublicKeyString.getBytes();
+        String base64ClientsDHPublicKeyString = Base64.getEncoder().encodeToString(clientsDHPublicKeyBytes);
+
+        return parsePublicKey(base64ClientsDHPublicKeyString);
+    }
 
 
     public static void main(String[] args) throws Exception {
-        int sentConfirmationCode = sendConfirmationMail("projetcrypto23@outlook.fr");
-       System.out.println("Starting...");
-        try {
-            Thread.sleep(30000); // wait for 0.5 min
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        int receivedConfirmationCode = confirmConfirmationCode("projetcrypto23@outlook.fr");
-        System.out.println("Sent = " +sentConfirmationCode + "\nReceived = " +receivedConfirmationCode);
-        //System.out.println("\nReceived = " +receivedConfirmationCode);
-    }
+        /*var id = "projetcrypto23@outlook.fr";
+        PublicKey clientsPublicKey = null;
+        if (verifyAuthentication(id)) {
+            clientsPublicKey = getClientsDHPublicKey(id);
+        };*/
+        PublicKey p = parsePublicKey("2c2f20db08f88719c9d80532203f7fbc6fdc77ec0a6873de280d6751981c2a3463d8c366cb133c21ede81958450d17f6608e964d3d799105637ab7c405af7b1f88a6dabfc8457341df8fc79484d80f3c0f3429835cd868c78c3fc8fc0996104de8b403c59976e906956193a1e366a40c043dd1aea6127c7c778ccf9fb2c9f04746dbc6645ea90a3fec83e71a1d24466fe725dbf4d3a988f5beeb2714dfb108c2f5caa80ea96819ff226bfe270c509c594a82e0c522117baaacbe743f172c3cd024a5db25533e4b243e302de71760bdf94a6905f5e281b1a8d9a03e3376965b6de77d5bf857fa76d851365d8d957050daa4545dc7ad387ed8bdb7b11e30529795");
+        System.out.println("\nClient's Public Key:\n" + p);
 
-    public KeyPair authentication (String id) {
-
-        String a = "";
-        Element b = new Element() {
-            @Override
-            public Field getField() {
-                return null;
-            }
-
-            @Override
-            public int getLengthInBytes() {
-                return 0;
-            }
-
-            @Override
-            public boolean isImmutable() {
-                return false;
-            }
-
-            @Override
-            public Element getImmutable() {
-                return null;
-            }
-
-            @Override
-            public Element duplicate() {
-                return null;
-            }
-
-            @Override
-            public Element set(Element element) {
-                return null;
-            }
-
-            @Override
-            public Element set(int i) {
-                return null;
-            }
-
-            @Override
-            public Element set(BigInteger bigInteger) {
-                return null;
-            }
-
-            @Override
-            public BigInteger toBigInteger() {
-                return null;
-            }
-
-            @Override
-            public Element setToRandom() {
-                return null;
-            }
-
-            @Override
-            public Element setFromHash(byte[] bytes, int i, int i1) {
-                return null;
-            }
-
-            @Override
-            public int setFromBytes(byte[] bytes) {
-                return 0;
-            }
-
-            @Override
-            public int setFromBytes(byte[] bytes, int i) {
-                return 0;
-            }
-
-            @Override
-            public byte[] toBytes() {
-                return new byte[0];
-            }
-
-            @Override
-            public byte[] toCanonicalRepresentation() {
-                return new byte[0];
-            }
-
-            @Override
-            public Element setToZero() {
-                return null;
-            }
-
-            @Override
-            public boolean isZero() {
-                return false;
-            }
-
-            @Override
-            public Element setToOne() {
-                return null;
-            }
-
-            @Override
-            public boolean isEqual(Element element) {
-                return false;
-            }
-
-            @Override
-            public boolean isOne() {
-                return false;
-            }
-
-            @Override
-            public Element twice() {
-                return null;
-            }
-
-            @Override
-            public Element square() {
-                return null;
-            }
-
-            @Override
-            public Element invert() {
-                return null;
-            }
-
-            @Override
-            public Element halve() {
-                return null;
-            }
-
-            @Override
-            public Element negate() {
-                return null;
-            }
-
-            @Override
-            public Element add(Element element) {
-                return null;
-            }
-
-            @Override
-            public Element sub(Element element) {
-                return null;
-            }
-
-            @Override
-            public Element mul(Element element) {
-                return null;
-            }
-
-            @Override
-            public Element mul(int i) {
-                return null;
-            }
-
-            @Override
-            public Element mul(BigInteger bigInteger) {
-                return null;
-            }
-
-            @Override
-            public Element mulZn(Element element) {
-                return null;
-            }
-
-            @Override
-            public Element div(Element element) {
-                return null;
-            }
-
-            @Override
-            public Element pow(BigInteger bigInteger) {
-                return null;
-            }
-
-            @Override
-            public Element powZn(Element element) {
-                return null;
-            }
-
-            @Override
-            public ElementPowPreProcessing getElementPowPreProcessing() {
-                return null;
-            }
-
-            @Override
-            public Element sqrt() {
-                return null;
-            }
-
-            @Override
-            public boolean isSqr() {
-                return false;
-            }
-
-            @Override
-            public int sign() {
-                return 0;
-            }
-        };
-        return new KeyPair(a, b);
     }
 
 }
