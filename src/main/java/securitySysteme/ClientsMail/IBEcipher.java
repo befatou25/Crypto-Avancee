@@ -1,4 +1,4 @@
-package SecuritySysteme.ClientsMail;
+package securitySysteme.ClientsMail;
 
 import it.unisa.dia.gas.jpbc.Element;
 
