@@ -2,18 +2,25 @@ package securitySysteme.autority;
 
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
-import securitySysteme.ClientsMail.IBEBasicIdent;
 
+import javax.crypto.spec.DHPublicKeySpec;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FromTerm;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
+import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Authentication {
 
@@ -22,7 +29,6 @@ public class Authentication {
     public static final Pairing pairing = PairingFactory.getPairing("src/main/resources/curves/a.properties"); // chargement des paramètres de la courbe elliptique
     // la configuration A offre un pairing symetrique ce qui correspond à l'implementation du schema basicID
     // qui est basé sur l'utilisation du pairing symetrique
-    public static final SettingParameters sp = IBEBasicIdent.setup(pairing);
     public static final int CONFIRMATIONCODE = generateConfirmationCode();
 
 
@@ -37,20 +43,16 @@ public class Authentication {
     /**
      * This method returns the first number of a given string
      * */
-    static int getNumbers(String s) {
-
-        String[] n = s.split(""); //array of strings
-        StringBuilder f = new StringBuilder(); // buffer to store numbers
-
-        for (String value : n) {
-            if ((value.matches("\\d+"))) { // validating numbers
-                f.append(value); //appending
+    public static int getNumbers(String s) {
+        StringBuilder numbers = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                numbers.append(c);
             } else {
-                //parsing to int and returning value
-                return Integer.parseInt(f.toString());
+                break;
             }
         }
-        return 0;
+        return Integer.parseInt(numbers.toString());
     }
 
     /**
@@ -78,13 +80,13 @@ public class Authentication {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(TRUSTEDAUTHORITY));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(id));
-            message.setSubject("Code de confirmation");
-            message.setText("Votre code de confirmation est : " + CONFIRMATIONCODE + "\nVeuillez répondre à ce mail en entrant votre code");
+            message.setSubject("Code de vérification");
+            message.setText("Votre code de vérification est : " + CONFIRMATIONCODE + "\nVous avez 3 min pour répondre à ce mail avec le même code de vérification en y joignant votre clef publique DH.");
 
             // Envoi de l'e-mail
             Transport.send(message);
 
-            System.out.println("L'e-mail avec le code de confirmation a été envoyé avec succès.");
+            System.out.println("L'e-mail avec le code de vérification a été envoyé avec succès.");
 
         } catch (MessagingException e) {
             System.out.println("Une erreur s'est produite lors de l'envoi de l'e-mail de confirmation : " + e.getMessage());
@@ -93,7 +95,7 @@ public class Authentication {
     }
 
 
-    public static List<Object> confirmConfirmationCode(String id) throws MessagingException, IOException, InterruptedException {
+    public static List<Object> confirmConfirmationCode(String id) throws MessagingException, IOException, InterruptedException, NoSuchAlgorithmException, InvalidKeySpecException {
         var properties = new Properties();
 
         // server setting (it can be pop3 too
@@ -106,11 +108,11 @@ public class Authentication {
 
         var clientResponse = new ArrayList<>();
         var receivedConfirmationCode = 0;
-        var receivedClientPublicKey = "";
+        PublicKey receivedClientPublicKey = null;
         var sender = new FromTerm(new InternetAddress(id));
 
+        Session session = Session.getDefaultInstance(properties);
         while (true) {
-            Session session = Session.getDefaultInstance(properties);
             Store store = session.getStore("imap");
             store.connect(TRUSTEDAUTHORITY, TRUSTEDAUTHORITYPASSWORD);
             Folder folderInbox = store.getFolder("INBOX");
@@ -140,7 +142,8 @@ public class Authentication {
                         if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
                             var clientPublicKeyStream = bodyPart.getInputStream();
                             var receivedClientPublicKeyBytes = clientPublicKeyStream.readAllBytes();
-                            receivedClientPublicKey = new String(receivedClientPublicKeyBytes);
+                            var receivedClientPublicKeyString = new String(receivedClientPublicKeyBytes);
+                            receivedClientPublicKey = getDHPublicKeyFromPublicKeyString(receivedClientPublicKeyString);
                         }
                     }
                 }
@@ -159,51 +162,51 @@ public class Authentication {
         return clientResponse;
     }
 
-    public static boolean verifyAuthentication(String id) throws MessagingException, IOException, InterruptedException {
-        int sentConfirmationCode = sendConfirmationMail(id);
-        System.out.println("Waiting 1 min for client's response...");
-        try {
-            Thread.sleep(60000); // wait for 1 min
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
+    public static PublicKey getDHPublicKeyFromPublicKeyString(String publicKeyString) throws NoSuchAlgorithmException, InvalidKeySpecException, RuntimeException {
+        PublicKey clientPublicKey;
+        // Extract the values of y, p, g, and l using regular expressions
+        Pattern yPattern = Pattern.compile("y:\r?\n\\s*([0-9a-f\\s]+)");
+        Matcher yMatcher = yPattern.matcher(publicKeyString);
+        if (!yMatcher.find()) {
+            throw new RuntimeException("Could not find y");
         }
-        return sentConfirmationCode == (int) confirmConfirmationCode(id).get(0);
-    }
+        String ystr = yMatcher.group(1).replaceAll("\\s+", "");
+        BigInteger y = new BigInteger(ystr, 16);
 
-    public static PublicKey parsePublicKey(String publicKeyString) throws Exception {
-        byte[] publicKeyBytes = new byte[publicKeyString.length() / 2];
-        for (int i = 0; i < publicKeyString.length(); i += 2) {
-            publicKeyBytes[i / 2] = (byte) ((Character.digit(publicKeyString.charAt(i), 16) << 4) + Character.digit(publicKeyString.charAt(i+1), 16));
+        Pattern pPattern = Pattern.compile("p:\r?\n\\s*([0-9a-f\\s]+)");
+        Matcher pMatcher = pPattern.matcher(publicKeyString);
+        if (!pMatcher.find()) {
+            throw new RuntimeException("Could not find p");
         }
+        String pstr = pMatcher.group(1).replaceAll("\\s+", "");
+        BigInteger p = new BigInteger(pstr, 16);
 
-        // Create a PublicKey object from the byte array
-        KeyFactory keyFactory = KeyFactory.getInstance("DiffieHellman");
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-        PublicKey clientPublicKey = keyFactory.generatePublic(keySpec);
+        Pattern gPattern = Pattern.compile("g:\r?\n\\s*([0-9a-f\\s]+)");
+        Matcher gMatcher = gPattern.matcher(publicKeyString);
+        if (!gMatcher.find()) {
+            throw new RuntimeException("Could not find g");
+        }
+        String gstr = gMatcher.group(1).replaceAll("\\s+", "");
+        BigInteger g = new BigInteger(gstr, 16);
 
-        // Generate a public key object from the public key specification and return it
+        Pattern lPattern = Pattern.compile("l:\r?\n\\s*(\\d+)");
+        Matcher lMatcher = lPattern.matcher(publicKeyString);
+        if (!lMatcher.find()) {
+            throw new RuntimeException("Could not find l");
+        }
+        int l = Integer.parseInt(lMatcher.group(1));
+
+        // Print the values of y, p, g, and l
+        System.out.println("y: " + y);
+        System.out.println("p: " + p);
+        System.out.println("g: " + g);
+        System.out.println("l: " + l);
+
+        // create a public key from the retrieved y value and the DH parameter specification
+        KeyFactory keyFactory = KeyFactory.getInstance("DH");
+        DHPublicKeySpec dhPublicKeySpec = new DHPublicKeySpec(y, p, g);
+        clientPublicKey = keyFactory.generatePublic(dhPublicKeySpec);
+
         return clientPublicKey;
     }
-
-    public static PublicKey getClientsDHPublicKey(String id) throws Exception {
-        String clientsDHPublicKeyString = (String) confirmConfirmationCode(id).get(1);
-        byte[] clientsDHPublicKeyBytes = clientsDHPublicKeyString.getBytes();
-        String base64ClientsDHPublicKeyString = Base64.getEncoder().encodeToString(clientsDHPublicKeyBytes);
-
-        return parsePublicKey(base64ClientsDHPublicKeyString);
-    }
-
-
-    public static void main(String[] args) throws Exception {
-        /*var id = "projetcrypto23@outlook.fr";
-        PublicKey clientsPublicKey = null;
-        if (verifyAuthentication(id)) {
-            clientsPublicKey = getClientsDHPublicKey(id);
-        };*/
-        PublicKey p = parsePublicKey("2c2f20db08f88719c9d80532203f7fbc6fdc77ec0a6873de280d6751981c2a3463d8c366cb133c21ede81958450d17f6608e964d3d799105637ab7c405af7b1f88a6dabfc8457341df8fc79484d80f3c0f3429835cd868c78c3fc8fc0996104de8b403c59976e906956193a1e366a40c043dd1aea6127c7c778ccf9fb2c9f04746dbc6645ea90a3fec83e71a1d24466fe725dbf4d3a988f5beeb2714dfb108c2f5caa80ea96819ff226bfe270c509c594a82e0c522117baaacbe743f172c3cd024a5db25533e4b243e302de71760bdf94a6905f5e281b1a8d9a03e3376965b6de77d5bf857fa76d851365d8d957050daa4545dc7ad387ed8bdb7b11e30529795");
-        System.out.println("\nClient's Public Key:\n" + p);
-
-    }
-
 }
