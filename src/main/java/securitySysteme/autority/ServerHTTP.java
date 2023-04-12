@@ -54,7 +54,7 @@ public class ServerHTTP {
                     System.out.println("id reçu " + id);
                     he.getRequestBody().close();
 
-                    // L'authentification du client, la generation de la clé IBE, le chiffrer la clé IBE avec la clé public du client
+                    // L'authentification du client, la generation de la clé IBE, la chiffrer la clé IBE avec la clé publique du client
                     List<byte[]> param;
                     try {
                         param = triggerCreationAndSendConfigsAndAESClientIBESk(id);
@@ -73,7 +73,7 @@ public class ServerHTTP {
                     byte[] fileContent = new byte[l.available()];
                     l.read(fileContent);
 
-                    // l'envoi de la clé chiffrée à l'aide la clé public du client à ce dernier
+                    // l'envoi de la clé chiffrée à l'aide la clé publique du client à ce dernier
                     he.sendResponseHeaders(200, fileContent.length);
                     OutputStream os = he.getResponseBody();
                     os.write(fileContent);

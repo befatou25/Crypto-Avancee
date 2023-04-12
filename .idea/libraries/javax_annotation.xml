@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="javax.annotation">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.annotation.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.ejb.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.jms.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.persistence.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.resource.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.servlet.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.servlet.jsp.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.servlet.jsp.jstl.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/Mailer/lib/javax.transaction.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

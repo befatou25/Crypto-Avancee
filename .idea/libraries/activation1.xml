@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="activation1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/activation.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/bcprov-jdk16-1.46.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/javax.mail-1.6.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/jna-3.2.5.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/jpbc-api-2.0.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/jpbc-benchmark-2.0.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/jpbc-crypto-2.0.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/jpbc-mm-2.0.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/jpbc-pbc-2.0.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/pièces jointes (1)/jpbc-plaf-2.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$USER_HOME$/Downloads/commons-io-2.11.0-bin/commons-io-2.11.0/docs" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://$USER_HOME$/Downloads/pièces jointes" />
+    </SOURCES>
+  </library>
+</component>

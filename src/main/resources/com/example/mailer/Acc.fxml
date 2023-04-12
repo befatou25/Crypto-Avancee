@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mailer.controllers.AccController">
+    <children>
+        <ToolBar layoutX="6.0" prefHeight="40.0" prefWidth="992.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <items>
+                <Button fx:id="newMessage" accessibleText="Nouveau message" maxWidth="160.0" mnemonicParsing="false" onAction="#gestionBoutton" prefWidth="160.0" style="-fx-background-color: #1B5333;" text="Nouveau message" textFill="WHITE">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font name="System Bold Italic" size="15.0" />
+                    </font></Button>
+                <Button fx:id="receptionButton" mnemonicParsing="false" onAction="#listMail" prefWidth="160.0" text="Boîte De réception">
+                    <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                    </font>
+                </Button>
+                <Button fx:id="sentMessages" mnemonicParsing="false" onAction="#MailsEnvoye" prefHeight="25.0" prefWidth="101.0" text="Eléments Envoyé">
+                    <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                    </font>
+                </Button>
+                <Button fx:id="reply" disable="true" mnemonicParsing="false" onAction="#replyto" text="Répondre">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font size="13.0" />
+                    </font></Button>
+                <Button fx:id="forward" disable="true" mnemonicParsing="false" onAction="#forwardto" text="Faire suivre">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font size="14.0" />
+                    </font></Button>
+                <Button fx:id="delete" disable="true" mnemonicParsing="false" onAction="#Supp" text="Supprimer">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font size="14.0" />
+                    </font></Button>
+            </items>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+        </ToolBar>
+        <SplitPane prefHeight="160.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <SplitPane dividerPositions="0.29797979797979796" prefHeight="758.0" prefWidth="832.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                    <children>
+                                        <ListView fx:id="mailList" prefHeight="755.0" prefWidth="405.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="755.0" prefWidth="616.0">
+                                    <children>
+                                        <SplitPane fx:id="emailSplitPane" dividerPositions="0.16180371352785147" layoutX="110.0" layoutY="196.0" orientation="VERTICAL" prefHeight="756.0" prefWidth="580.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <items>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                                    <children>
+                                                        <GridPane layoutX="104.0" prefHeight="119.0" prefWidth="578.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                            <columnConstraints>
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="110.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="491.0" minWidth="10.0" prefWidth="468.0" />
+                                                            </columnConstraints>
+                                                            <rowConstraints>
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            </rowConstraints>
+                                                            <children>
+                                                                <TextField fx:id="subjectField" editable="false" prefHeight="26.0" prefWidth="509.0" GridPane.columnSpan="2">
+                                                                    <font>
+                                                                        <Font name="System Bold" size="14.0" />
+                                                                    </font>
+                                                                </TextField>
+                                                                <TextField fx:id="senderField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                <ListView fx:id="attachmentListView" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                                <Label text="Expéditeur : " GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                                            </children>
+                                                        </GridPane>
+                                                    </children>
+                                                </AnchorPane>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                                    <children>
+                                                        <TextArea fx:id="textArea" editable="false" layoutX="157.0" layoutY="227.0" prefHeight="629.0" prefWidth="578.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </items>
+                                        </SplitPane>
+                                    </children></AnchorPane>
+
+
+                            </items>
+                        </SplitPane>
+                    </children></AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>
